@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Julissa Job Alignment Board</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #5b6475;
+      --line: #d8deea;
+      --blue: #1f5eff;
+      --blue2: #123c9c;
+      --green: #147a52;
+      --gold: #9b6200;
+      --red: #a43b3b;
+      --shadow: 0 12px 30px rgba(18, 34, 63, .12);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eaf0fb 0%, #f7f9fd 45%, #eef3fb 100%);
+      color: var(--ink);
+    }
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+    .hero {
+      background: radial-gradient(circle at 15% 20%, rgba(255,255,255,.26), transparent 28%), linear-gradient(135deg, #153a86, #1f5eff);
+      color: white;
+      border-radius: 30px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -.03em;
+    }
+    .hero p {
+      margin: 0;
+      max-width: 900px;
+      color: rgba(255,255,255,.9);
+      line-height: 1.45;
+    }
+    .hero .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .badge {
+      background: rgba(255,255,255,.17);
+      border: 1px solid rgba(255,255,255,.26);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .controls {
+      margin: 18px 0;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.3fr .9fr .8fr .8fr;
+      gap: 12px;
+      backdrop-filter: blur(12px);
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 14px;
+      font-size: 15px;
+      background: white;
+      color: var(--ink);
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(31,94,255,.14);
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(18, 34, 63, .06);
+    }
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      color: var(--blue2);
+    }
+    .stat span {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .notes {
+      background: #fff9e8;
+      border: 1px solid #f3d98b;
+      color: #624200;
+      padding: 12px 14px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      line-height: 1.45;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding-bottom: 40px;
+    }
+    .job-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(18, 34, 63, .08);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .job-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: rgba(31,94,255,.35);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    h3 {
+      margin: 8px 0 4px;
+      font-size: 22px;
+      line-height: 1.14;
+      letter-spacing: -.02em;
+    }
+    .company {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eef3ff;
+      color: #173d94;
+    }
+    .intake-and-care-coordination { background: #e9f8f1; color: #126045; }
+    .office-and-administrative-support { background: #eef3ff; color: #173d94; }
+    .program-and-residential-support { background: #fff0e5; color: #944b12; }
+    .front-desk-and-customer-service { background: #f0eaff; color: #573299; }
+    .retail-stocking-and-inventory { background: #edf7ff; color: #155477; }
+    .score {
+      min-width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #eef3ff, #dfe9ff);
+      border: 1px solid #cddaff;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+    .score span {
+      display: block;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--blue2);
+      line-height: 1;
+    }
+    .score small {
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .meta span {
+      background: #f5f7fb;
+      border: 1px solid #e4e9f3;
+      padding: 8px 10px;
+      border-radius: 12px;
+      color: #303a4f;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .status {
+      margin: 8px 0;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .angle {
+      color: #303a4f;
+      line-height: 1.42;
+      margin: 10px 0 14px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      position: relative;
+    }
+    .primary { background: var(--blue); color: white; }
+    .secondary { background: #eef3ff; color: var(--blue2); }
+    .ghost { background: #f6f7fa; color: #263145; border: 1px solid var(--line); }
+    .copy-angle:hover::after, .copy-angle:focus::after {
+      content: attr(data-copy);
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 10px);
+      width: min(360px, 78vw);
+      background: #111827;
+      color: white;
+      padding: 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      font-weight: 500;
+      line-height: 1.35;
+      z-index: 20;
+      text-align: left;
+      white-space: normal;
+    }
+    .copy-angle:hover::before, .copy-angle:focus::before {
+      content: "";
+      position: absolute;
+      left: 24px;
+      bottom: calc(100% + 2px);
+      border: 8px solid transparent;
+      border-top-color: #111827;
+      z-index: 21;
+    }
+    .empty {
+      display: none;
+      background: white;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(20px);
+      background: #111827;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+      z-index: 999;
+      font-weight: 800;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 860px) {
+      .app { padding: 12px; }
+      .hero { position: static; border-radius: 24px; }
+      .controls { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+      .grid { grid-template-columns: 1fr; }
+      h3 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <h1>Julissa Job Alignment Board</h1>
+      <p>Live job search board built around your resume strengths: intake coordination, office support, Google Workspace, scheduling, customer service, participant records, stocking, and residential program support.</p>
+      <div class="badges">
+        <span class="badge">Updated: May 8, 2026</span>
+        <span class="badge">Known expired jobs removed</span>
+        <span class="badge">Includes backup search links</span>
+        <span class="badge">Hover over Copy Resume Angle to preview text</span>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Job filters">
+      <input id="searchBox" type="search" placeholder="Search company, title, location, or keyword..." />
+      <select id="categoryFilter">
+        <option value="All">All alignment categories</option>
+        <option value="Front Desk &amp; Customer Service">Front Desk &amp; Customer Service</option><option value="Intake &amp; Care Coordination">Intake &amp; Care Coordination</option><option value="Office &amp; Administrative Support">Office &amp; Administrative Support</option><option value="Program &amp; Residential Support">Program &amp; Residential Support</option><option value="Retail, Stocking &amp; Inventory">Retail, Stocking &amp; Inventory</option>
+      </select>
+      <select id="scoreFilter">
+        <option value="0">All match scores</option>
+        <option value="90">90+ strongest matches</option>
+        <option value="85">85+ strong matches</option>
+        <option value="80">80+ good matches</option>
+        <option value="75">75+ backup matches</option>
+      </select>
+      <select id="sortFilter">
+        <option value="score">Sort by match score</option>
+        <option value="category">Sort by category</option>
+        <option value="company">Sort by company</option>
+      </select>
+    </section>
+
+    <section class="summary">
+      <div class="stat"><strong id="visibleCount">35</strong><span>visible jobs</span></div>
+      <div class="stat"><strong>35</strong><span>total listings</span></div>
+      <div class="stat"><strong>5</strong><span>alignment categories</span></div>
+      <div class="stat"><strong>35</strong><span>resume angles included</span></div>
+    </section>
+
+    <div class="notes">
+      These links were built to avoid the expired job listings, however job boards can still close posts without warning, so every card includes a direct posting link and a backup search link for the same company/title.
+    </div>
+
+    <section id="jobGrid" class="grid">
+      
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="96" data-location="San Diego, CA 92128" data-search="intake coordinator full time active health services san diego, ca 92128 intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Coordinator FULL TIME</h3>
+            <p class="company">Active Health Services</p>
+          </div>
+          <div class="score"><span>96</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92128</span>
+          <span>💵 $23/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Source page found by Indeed. Verify before applying.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use your ECTLC intake phones, scheduling, applicant communication, participant records, Google Sheets, and trauma-informed communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=467d816abc1e4b7c" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Active+Health+Services+Intake+Coordinator&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use your ECTLC intake phones, scheduling, applicant communication, participant records, Google Sheets, and trauma-informed communication." aria-label="Copy resume angle for Intake Coordinator FULL TIME">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="95" data-location="San Diego, CA" data-search="intake coordinator, safe stay san diego lgbt community center san diego, ca intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Coordinator, Safe STAY</h3>
+            <p class="company">San Diego LGBT Community Center</p>
+          </div>
+          <div class="score"><span>95</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 $23-$23.50/hr</span>
+          <span>🕒 Full-time or part-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter page showed posted 15 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Lead with residential program support, intake coordination, confidentiality, participant communication, and recovery-program structure.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/San-Diego-LGBT-Community-Center/Job/Intake-Coordinator%2C-Safe-STAY/-in-San-Diego%2CCA?jid=b8f3a49749295056" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Intake-Coordinator/-in-San-Diego,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Lead with residential program support, intake coordination, confidentiality, participant communication, and recovery-program structure." aria-label="Copy resume angle for Intake Coordinator, Safe STAY">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="93" data-location="San Diego, CA" data-search="intake coordinator world relief san diego, ca intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Coordinator</h3>
+            <p class="company">World Relief</p>
+          </div>
+          <div class="score"><span>93</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 $21-$23/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for the specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Stress applicant communication, document uploads, Google Drive/Sheets, intake tracking, and supporting people through next steps.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=92787851f65713f4" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=World+Relief+Intake+Coordinator&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Stress applicant communication, document uploads, Google Drive/Sheets, intake tracking, and supporting people through next steps." aria-label="Copy resume angle for Intake Coordinator">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="92" data-location="San Diego, CA 92111" data-search="intake coordinator - home health seaport scripps home health / pennant group san diego, ca 92111 intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Coordinator - Home Health</h3>
+            <p class="company">Seaport Scripps Home Health / Pennant Group</p>
+          </div>
+          <div class="score"><span>92</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92111</span>
+          <span>💵 $23-$28/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for the specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use intake calls, appointment scheduling, records updates, phone/text/email communication, and high-volume follow-up.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=06f382dceb972843" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Seaport+Scripps+Home+Health+Intake+Coordinator&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use intake calls, appointment scheduling, records updates, phone/text/email communication, and high-volume follow-up." aria-label="Copy resume angle for Intake Coordinator - Home Health">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="91" data-location="San Diego, CA 92126" data-search="intake coordinator for home health shield home health san diego, ca 92126 intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Coordinator for Home Health</h3>
+            <p class="company">Shield Home Health</p>
+          </div>
+          <div class="score"><span>91</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92126</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for the specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Present yourself as organized, reliable, patient-facing, and strong with scheduling, records, and follow-up.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=1b46335f67bb9c8f" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Shield+Home+Health+Intake+Coordinator&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Present yourself as organized, reliable, patient-facing, and strong with scheduling, records, and follow-up." aria-label="Copy resume angle for Intake Coordinator for Home Health">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="90" data-location="San Diego, CA 92128" data-search="intake &amp; care coordination comforcare home health care san diego, ca 92128 intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake &amp; Care Coordination</h3>
+            <p class="company">ComForCare Home Health Care</p>
+          </div>
+          <div class="score"><span>90</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92128</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Care coordination</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for the specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Connect your intake, scheduling, care coordination, and clear communication with families and applicants.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=7b8fa281b4a164de" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=ComForCare+Intake+Care+Coordination&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Connect your intake, scheduling, care coordination, and clear communication with families and applicants." aria-label="Copy resume angle for Intake &amp; Care Coordination">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="89" data-location="San Diego, CA" data-search="pace referrals specialist san ysidro health san diego, ca intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>PACE Referrals Specialist</h3>
+            <p class="company">San Ysidro Health</p>
+          </div>
+          <div class="score"><span>89</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 $27.93-$35.32/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter page showed posted 27 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use referral coordination, document follow-up, database/record lookup, attention to detail, and patient/customer communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/syhealth/Job/PACE-Referrals-Specialist/-in-San-Diego%2CCA?jid=ad03c160f3605ff4" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Referral-Specialist/-in-San-Diego,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use referral coordination, document follow-up, database/record lookup, attention to detail, and patient/customer communication." aria-label="Copy resume angle for PACE Referrals Specialist">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="87" data-location="Chula Vista, CA" data-search="intake specialist, pump team adapthealth chula vista, ca intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake Specialist, Pump Team</h3>
+            <p class="company">AdaptHealth</p>
+          </div>
+          <div class="score"><span>87</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 Chula Vista, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted 4 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Emphasize intake documentation, phones, customer service, and accurate data entry.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/AdaptHealth%2C-LLC/Job/Intake-Specialist%2C-Pump-Team/-in-Chula-Vista%2CCA?jid=29a3f942ffbab939" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Intake-Specialist/-in-Chula-Vista,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Emphasize intake documentation, phones, customer service, and accurate data entry." aria-label="Copy resume angle for Intake Specialist, Pump Team">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Intake &amp; Care Coordination" data-score="84" data-location="Escondido, CA" data-search="intake and care coordinator part time synergy homecare escondido, ca intake &amp; care coordination">
+        <div class="card-top">
+          <div>
+            <div class="category-pill intake-and-care-coordination">Intake &amp; Care Coordination</div>
+            <h3>Intake and Care Coordinator Part Time</h3>
+            <p class="company">SYNERGY HomeCare</p>
+          </div>
+          <div class="score"><span>84</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 Escondido, CA</span>
+          <span>💵 $20-$23/hr</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter page showed recently posted.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use intake scheduling, appointment coordination, phone etiquette, and care-oriented communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Synergy-HomeCare/Job/Intake-and-Scheduling-Coordinator/-in-Escondido%2CCA?jid=7a4d30a7f46f4ac6" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Intake-and-Scheduling-Coordinator/-in-Escondido,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use intake scheduling, appointment coordination, phone etiquette, and care-oriented communication." aria-label="Copy resume angle for Intake and Care Coordinator Part Time">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="94" data-location="El Cajon, CA 92020" data-search="office administrative assistant krushensky construction, inc. el cajon, ca 92020 office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Office Administrative Assistant</h3>
+            <p class="company">Krushensky Construction, Inc.</p>
+          </div>
+          <div class="score"><span>94</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 $21-$25/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with pay and location.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use office support, phones, filing, scanning, copying, document uploads, Google Workspace, and scheduling.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=611c1a1eb2f5890b" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Krushensky+Construction+Office+Administrative+Assistant&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use office support, phones, filing, scanning, copying, document uploads, Google Workspace, and scheduling." aria-label="Copy resume angle for Office Administrative Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="93" data-location="El Cajon, CA" data-search="administrative assistant iii grossmont-cuyamaca community college el cajon, ca office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Administrative Assistant III</h3>
+            <p class="company">Grossmont-Cuyamaca Community College</p>
+          </div>
+          <div class="score"><span>93</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 $25.41-$31.79/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter page showed posted 4 days ago and closing 5/26/2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Lean into administrative detail, records, forms, student/public-facing service, Google Workspace, and front/back office support.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Grossmont-Cuyamaca-Community-College/Job/Administrative-Assistant-III/-in-El-Cajon%2CCA?jid=5bd3c56d3e9284e0" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.gcccd.edu/human-resources/jobs.html" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Lean into administrative detail, records, forms, student/public-facing service, Google Workspace, and front/back office support." aria-label="Copy resume angle for Administrative Assistant III">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="90" data-location="El Cajon, CA 92020" data-search="medical office administrative assistant san diego family dermatology el cajon, ca 92020 office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Medical Office Administrative Assistant</h3>
+            <p class="company">San Diego Family Dermatology</p>
+          </div>
+          <div class="score"><span>90</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 $19-$20/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active job description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Match intake phones to patient calls, scheduling, confirmation calls, referral coordination, and record accuracy.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=06e7b0487e5c40ff" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=San+Diego+Family+Dermatology+Medical+Office+Administrative+Assistant&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Match intake phones to patient calls, scheduling, confirmation calls, referral coordination, and record accuracy." aria-label="Copy resume angle for Medical Office Administrative Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="88" data-location="El Cajon, CA" data-search="construction administrative assistant bbsi southern california el cajon, ca office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Construction Administrative Assistant</h3>
+            <p class="company">BBSI Southern California</p>
+          </div>
+          <div class="score"><span>88</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 $45,761-$60,000/yr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted 2 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use document handling, data entry, filing, office communication, and follow-up assignments.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/BBSI-Southern-California/Job/Construction-Administrative-Assistant/-in-El-Cajon%2CCA?jid=62f22afc8396cdf2" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Construction-Administrative-Assistant/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use document handling, data entry, filing, office communication, and follow-up assignments." aria-label="Copy resume angle for Construction Administrative Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="87" data-location="El Cajon, CA" data-search="administrative assistant els el cajon, ca office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Administrative Assistant</h3>
+            <p class="company">ELS</p>
+          </div>
+          <div class="score"><span>87</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use front desk greeting, resident communication, file organization, office supplies, and team support.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=03c1d3451b236c19" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=ELS+Administrative+Assistant&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use front desk greeting, resident communication, file organization, office supplies, and team support." aria-label="Copy resume angle for Administrative Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="86" data-location="El Cajon, CA" data-search="business office assistant ft cottonwood canyon healthcare center el cajon, ca office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Business Office Assistant FT</h3>
+            <p class="company">Cottonwood Canyon Healthcare Center</p>
+          </div>
+          <div class="score"><span>86</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 $18-$23/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted Apr 15, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Match residential program office support, confidential records, intake files, and participant/resident communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Cottonwood-Canyon-Healthcare-Center/Job/Business-Office-Assistant-FT-CCHC/-in-El-Cajon%2CCA?jid=a210f679f25e0586" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Business-Office-Assistant/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Match residential program office support, confidential records, intake files, and participant/resident communication." aria-label="Copy resume angle for Business Office Assistant FT">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="85" data-location="El Cajon, CA" data-search="administrative assistant ii - cte district office grossmont union high school district el cajon, ca office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Administrative Assistant II - CTE District Office</h3>
+            <p class="company">Grossmont Union High School District</p>
+          </div>
+          <div class="score"><span>85</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 $40,700-$56,400/yr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted Apr 29, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use education-adjacent admin support, scheduling, records, forms, and professional communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Grossmont-Union-High-School-District/Job/Administrative-Assistant-II-CTE-District-Office-CP26-014831/-in-El-Cajon%2CCA?jid=09dc6a954be40168" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.edjoin.org/guhsd" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use education-adjacent admin support, scheduling, records, forms, and professional communication." aria-label="Copy resume angle for Administrative Assistant II - CTE District Office">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="84" data-location="El Cajon, CA 92021" data-search="administrative assistant emcor uk el cajon, ca 92021 office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Administrative Assistant</h3>
+            <p class="company">EMCOR UK</p>
+          </div>
+          <div class="score"><span>84</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92021</span>
+          <span>💵 $19-$25/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted March 18, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use clerical tasks, phones, data entry, document management, and office coordination.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Emcor-UK/Job/Administrative-Assistant/-in-El-Cajon%2CCA?jid=617fd4b0072427e2" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Administrative-Assistant/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use clerical tasks, phones, data entry, document management, and office coordination." aria-label="Copy resume angle for Administrative Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Office &amp; Administrative Support" data-score="82" data-location="San Diego, CA 92105" data-search="administrative assistant iii family health centers of san diego san diego, ca 92105 office &amp; administrative support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill office-and-administrative-support">Office &amp; Administrative Support</div>
+            <h3>Administrative Assistant III</h3>
+            <p class="company">Family Health Centers of San Diego</p>
+          </div>
+          <div class="score"><span>82</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92105</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use healthcare-facing admin, records, phone communication, scheduling, and attention to detail.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=a8552de69b7fb0bf" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Family+Health+Centers+Administrative+Assistant+III&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use healthcare-facing admin, records, phone communication, scheduling, and attention to detail." aria-label="Copy resume angle for Administrative Assistant III">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="93" data-location="San Diego, CA 92113" data-search="residential services coordinator ii - detox st. vincent de paul village / father joe&#x27;s villages san diego, ca 92113 program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Residential Services Coordinator II - Detox</h3>
+            <p class="company">St. Vincent De Paul Village / Father Joe&#x27;s Villages</p>
+          </div>
+          <div class="score"><span>93</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92113</span>
+          <span>💵 $20.27-$23.31/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active job description.</p>
+        <p class="angle"><strong>Resume angle:</strong> This is a strong ECTLC crossover: recovery environment, accountability, participant support, trauma-informed communication, and documentation.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=668ff07871a43e34" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Residential+Services+Coordinator+II+Detox+Father+Joe%27s&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="This is a strong ECTLC crossover: recovery environment, accountability, participant support, trauma-informed communication, and documentation." aria-label="Copy resume angle for Residential Services Coordinator II - Detox">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="91" data-location="San Diego, CA 92101" data-search="residential service coordinator i downtown san diego partnership san diego, ca 92101 program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Residential Service Coordinator I</h3>
+            <p class="company">Downtown San Diego Partnership</p>
+          </div>
+          <div class="score"><span>91</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92101</span>
+          <span>💵 $20-$23/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use residential accountability, program procedures, participant communication, and incident/compliance documentation.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=27d5833ab355041b" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Residential+Service+Coordinator+I+Downtown+San+Diego+Partnership&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use residential accountability, program procedures, participant communication, and incident/compliance documentation." aria-label="Copy resume angle for Residential Service Coordinator I">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="90" data-location="San Diego, CA 92101" data-search="unhoused shelter coordinator i downtown san diego partnership san diego, ca 92101 program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Unhoused Shelter Coordinator I</h3>
+            <p class="company">Downtown San Diego Partnership</p>
+          </div>
+          <div class="score"><span>90</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA 92101</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Shelter support</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for the specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use ECTLC residential-program experience, trauma-informed communication, safety/accountability, and documentation.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=4c65d5d0d3708d71" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Unhoused+Shelter+Coordinator+I+Downtown+San+Diego+Partnership&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use ECTLC residential-program experience, trauma-informed communication, safety/accountability, and documentation." aria-label="Copy resume angle for Unhoused Shelter Coordinator I">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="88" data-location="San Diego, CA" data-search="residence life program assistant uc san diego san diego, ca program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Residence Life Program Assistant</h3>
+            <p class="company">UC San Diego</p>
+          </div>
+          <div class="score"><span>88</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 $53,160.48-$55,519.92/yr</span>
+          <span>🕒 Full-time, hybrid</span>
+        </div>
+        <p class="status">Verification note: Indeed page showed filing deadline 5/21/2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use residential support, student/participant communication, administrative tracking, and Google/Microsoft office skills.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=61d7fccedda426e5" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://employment.ucsd.edu/" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use residential support, student/participant communication, administrative tracking, and Google/Microsoft office skills." aria-label="Copy resume angle for Residence Life Program Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="82" data-location="San Diego, CA" data-search="program assistant marine corps community services san diego, ca program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Program Assistant</h3>
+            <p class="company">Marine Corps Community Services</p>
+          </div>
+          <div class="score"><span>82</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Program support</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use program operations, participant/customer service, scheduling support, and data entry.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=3fa1a1dce7bd3bb5" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Marine+Corps+Community+Services+Program+Assistant&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use program operations, participant/customer service, scheduling support, and data entry." aria-label="Copy resume angle for Program Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Program &amp; Residential Support" data-score="81" data-location="San Diego, CA" data-search="program assistant asgn incorporated san diego, ca program &amp; residential support">
+        <div class="card-top">
+          <div>
+            <div class="category-pill program-and-residential-support">Program &amp; Residential Support</div>
+            <h3>Program Assistant</h3>
+            <p class="company">ASGN Incorporated</p>
+          </div>
+          <div class="score"><span>81</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 San Diego, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Program support</span>
+        </div>
+        <p class="status">Verification note: Indeed result showed Apr 29, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use administrative support, reports, data entry, scheduling, and follow-up.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=6ebb26d23fc7df61" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=ASGN+Program+Assistant&amp;l=San+Diego%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use administrative support, reports, data entry, scheduling, and follow-up." aria-label="Copy resume angle for Program Assistant">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="88" data-location="El Cajon, CA 92020" data-search="patient services representative neighborhood healthcare el cajon, ca 92020 front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>Patient Services Representative</h3>
+            <p class="company">Neighborhood Healthcare</p>
+          </div>
+          <div class="score"><span>88</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 $18-$23/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted Apr 24, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use patient/customer communication, appointment scheduling, intake records, phone etiquette, and confidentiality.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Neighborhood-Healthcare/Job/Patient-Services-Representative/-in-El-Cajon%2CCA?jid=9777bb97fc6fb911" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Patient-Services-Representative/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use patient/customer communication, appointment scheduling, intake records, phone etiquette, and confidentiality." aria-label="Copy resume angle for Patient Services Representative">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="86" data-location="El Cajon, CA" data-search="call center representative - part time sycuan casino resort el cajon, ca front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>Call Center Representative - Part Time</h3>
+            <p class="company">Sycuan Casino Resort</p>
+          </div>
+          <div class="score"><span>86</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page showed posted Apr 15, 2026.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use intake phones, high-volume calls, clear routing, customer service, and calm communication.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=b2e274685b0eec48" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Sycuan+Call+Center+Representative&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use intake phones, high-volume calls, clear routing, customer service, and calm communication." aria-label="Copy resume angle for Call Center Representative - Part Time">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="84" data-location="El Cajon, CA" data-search="customer service representative u-haul international el cajon, ca front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>Customer Service Representative</h3>
+            <p class="company">U-Haul International</p>
+          </div>
+          <div class="score"><span>84</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 $16.75-$22.75/hr estimated</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter page showed posted 17 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use customer service, payment/POS, phones, scheduling, problem solving, and hospitality experience.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/U-Haul-International/Job/Customer-Service-Representative/-in-El-Cajon%2CCA?jid=02b1e94b3a6ba04e" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Customer-Service-Representative/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use customer service, payment/POS, phones, scheduling, problem solving, and hospitality experience." aria-label="Copy resume angle for Customer Service Representative">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="83" data-location="El Cajon, CA 92020" data-search="csr alcon3pl el cajon, ca 92020 front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>CSR</h3>
+            <p class="company">Alcon3PL</p>
+          </div>
+          <div class="score"><span>83</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 $16.75-$22.75/hr estimated</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted 21 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use customer service, data entry, phone communication, and multitasking.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Alcon3Pl/Job/CSR/-in-El-Cajon%2CCA?jid=e5ff0cff68713310" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/CSR/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use customer service, data entry, phone communication, and multitasking." aria-label="Copy resume angle for CSR">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="82" data-location="El Cajon, CA 92021" data-search="csr - in office sales representative fred loya insurance el cajon, ca 92021 front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>CSR - In Office Sales Representative</h3>
+            <p class="company">Fred Loya Insurance</p>
+          </div>
+          <div class="score"><span>82</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92021</span>
+          <span>💵 $19-$29/hr</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result found for specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use front-office communication, cash handling, customer service, and record accuracy.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/FRED-LOYA-INSURANCE-AGENCY/Job/CSR-In-office-Sales-Representative/-in-El-Cajon%2CCA?jid=4070937bb891d150" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Insurance-Customer-Service/-in-El-Cajon,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use front-office communication, cash handling, customer service, and record accuracy." aria-label="Copy resume angle for CSR - In Office Sales Representative">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Front Desk &amp; Customer Service" data-score="80" data-location="La Mesa, CA" data-search="customer service representative borrego health la mesa, ca front desk &amp; customer service">
+        <div class="card-top">
+          <div>
+            <div class="category-pill front-desk-and-customer-service">Front Desk &amp; Customer Service</div>
+            <h3>Customer Service Representative</h3>
+            <p class="company">Borrego Health</p>
+          </div>
+          <div class="score"><span>80</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 La Mesa, CA</span>
+          <span>💵 $16.50-$22.25/hr estimated</span>
+          <span>🕒 Full-time</span>
+        </div>
+        <p class="status">Verification note: ZipRecruiter result showed posted 22 days ago.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use medical/customer service crossover, phone etiquette, patient communication, and data entry.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.ziprecruiter.com/c/Borrego-Health/Job/Customer-Service-Representative/-in-La-Mesa%2CCA?jid=62dc915043e3ed94" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.ziprecruiter.com/Jobs/Customer-Service-Representative/-in-La-Mesa,CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use medical/customer service crossover, phone etiquette, patient communication, and data entry." aria-label="Copy resume angle for Customer Service Representative">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Retail, Stocking &amp; Inventory" data-score="78" data-location="El Cajon, CA 92020" data-search="retail stocking associate - part time burlington stores el cajon, ca 92020 retail, stocking &amp; inventory">
+        <div class="card-top">
+          <div>
+            <div class="category-pill retail-stocking-and-inventory">Retail, Stocking &amp; Inventory</div>
+            <h3>Retail Stocking Associate - Part Time</h3>
+            <p class="company">Burlington Stores</p>
+          </div>
+          <div class="score"><span>78</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 $16.90/hr</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use stocking, organization, hospitality pace, customer service, teamwork, and reliable attendance.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=5aebe00d799ba604" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Burlington+Retail+Stocking+Associate&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use stocking, organization, hospitality pace, customer service, teamwork, and reliable attendance." aria-label="Copy resume angle for Retail Stocking Associate - Part Time">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Retail, Stocking &amp; Inventory" data-score="76" data-location="El Cajon, CA 92021" data-search="stocker walmart el cajon, ca 92021 retail, stocking &amp; inventory">
+        <div class="card-top">
+          <div>
+            <div class="category-pill retail-stocking-and-inventory">Retail, Stocking &amp; Inventory</div>
+            <h3>Stocker</h3>
+            <p class="company">Walmart</p>
+          </div>
+          <div class="score"><span>76</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92021</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use stocking, inventory support, organization, teamwork, and customer-facing service.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=73810757b3b52ada" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Walmart+Stocker&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use stocking, inventory support, organization, teamwork, and customer-facing service." aria-label="Copy resume angle for Stocker">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Retail, Stocking &amp; Inventory" data-score="75" data-location="El Cajon, CA" data-search="part time merchandiser american greetings el cajon, ca retail, stocking &amp; inventory">
+        <div class="card-top">
+          <div>
+            <div class="category-pill retail-stocking-and-inventory">Retail, Stocking &amp; Inventory</div>
+            <h3>Part Time Merchandiser</h3>
+            <p class="company">American Greetings</p>
+          </div>
+          <div class="score"><span>75</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use stocking, backroom organization, sales floor service, and attention to detail.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=ad7d35967e48a424" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=American+Greetings+Merchandiser&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use stocking, backroom organization, sales floor service, and attention to detail." aria-label="Copy resume angle for Part Time Merchandiser">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Retail, Stocking &amp; Inventory" data-score="74" data-location="El Cajon, CA 92020" data-search="retail service specialist o&#x27;reilly auto parts el cajon, ca 92020 retail, stocking &amp; inventory">
+        <div class="card-top">
+          <div>
+            <div class="category-pill retail-stocking-and-inventory">Retail, Stocking &amp; Inventory</div>
+            <h3>Retail Service Specialist</h3>
+            <p class="company">O&#x27;Reilly Auto Parts</p>
+          </div>
+          <div class="score"><span>74</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA 92020</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Retail support</span>
+        </div>
+        <p class="status">Verification note: Indeed page found with active job description.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use customer service, POS/cash handling, stocking, store appearance, and problem solving.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=3f5d4d96786a0ddb" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=O%27Reilly+Retail+Service+Specialist&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use customer service, POS/cash handling, stocking, store appearance, and problem solving." aria-label="Copy resume angle for Retail Service Specialist">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+      <article class="job-card" data-category="Retail, Stocking &amp; Inventory" data-score="73" data-location="El Cajon, CA" data-search="part-time associate - 931 el cajon smart &amp; final el cajon, ca retail, stocking &amp; inventory">
+        <div class="card-top">
+          <div>
+            <div class="category-pill retail-stocking-and-inventory">Retail, Stocking &amp; Inventory</div>
+            <h3>Part-time Associate - 931 El Cajon</h3>
+            <p class="company">Smart &amp; Final</p>
+          </div>
+          <div class="score"><span>73</span><small>match</small></div>
+        </div>
+        <div class="meta">
+          <span>📍 El Cajon, CA</span>
+          <span>💵 Not listed</span>
+          <span>🕒 Part-time</span>
+        </div>
+        <p class="status">Verification note: Indeed page found for specific company/title.</p>
+        <p class="angle"><strong>Resume angle:</strong> Use retail customer service, stocking, POS, cash handling, and teamwork.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.indeed.com/viewjob?jk=621160fd78af920d" target="_blank" rel="noopener">Open Job</a>
+          <a class="btn secondary" href="https://www.indeed.com/jobs?q=Smart+%26+Final+Part-time+Associate+931+El+Cajon&amp;l=El+Cajon%2C+CA" target="_blank" rel="noopener">Backup Search</a>
+          <button class="btn ghost copy-angle" data-copy="Use retail customer service, stocking, POS, cash handling, and teamwork." aria-label="Copy resume angle for Part-time Associate - 931 El Cajon">Copy Resume Angle</button>
+        </div>
+      </article>
+    
+    </section>
+
+    <div id="empty" class="empty">No jobs match the current filters. Clear the search box or lower the match score filter.</div>
+  </main>
+
+  <div id="toast" class="toast">Resume angle copied</div>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll('.job-card'));
+    const searchBox = document.getElementById('searchBox');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const scoreFilter = document.getElementById('scoreFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const visibleCount = document.getElementById('visibleCount');
+    const empty = document.getElementById('empty');
+    const grid = document.getElementById('jobGrid');
+    const toast = document.getElementById('toast');
+
+    function applyFilters() {
+      const q = searchBox.value.trim().toLowerCase();
+      const cat = categoryFilter.value;
+      const minScore = Number(scoreFilter.value || 0);
+
+      let visible = 0;
+      cards.forEach(card => {
+        const matchSearch = !q || card.dataset.search.includes(q);
+        const matchCat = cat === 'All' || card.dataset.category === cat;
+        const matchScore = Number(card.dataset.score) >= minScore;
+        const show = matchSearch && matchCat && matchScore;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      visibleCount.textContent = visible;
+      empty.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function sortCards() {
+      const mode = sortFilter.value;
+      const sorted = [...cards].sort((a,b) => {
+        if (mode === 'score') return Number(b.dataset.score) - Number(a.dataset.score);
+        if (mode === 'category') return a.dataset.category.localeCompare(b.dataset.category) || Number(b.dataset.score) - Number(a.dataset.score);
+        if (mode === 'company') {
+          const ac = a.querySelector('.company').textContent.trim();
+          const bc = b.querySelector('.company').textContent.trim();
+          return ac.localeCompare(bc);
+        }
+        return 0;
+      });
+      sorted.forEach(card => grid.appendChild(card));
+      applyFilters();
+    }
+
+    [searchBox, categoryFilter, scoreFilter].forEach(el => el.addEventListener('input', applyFilters));
+    sortFilter.addEventListener('change', sortCards);
+
+    document.querySelectorAll('.copy-angle').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy;
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (e) {
+          const temp = document.createElement('textarea');
+          temp.value = text;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          temp.remove();
+        }
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1400);
+      });
+    });
+
+    sortCards();
+  </script>
+</body>
+</html>
