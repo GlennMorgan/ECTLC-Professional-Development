@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Earl Shaw-Davis - Live Job Alignment Board</title>
+<style>
+  :root {
+    --bg: #f3f6fb;
+    --ink: #172033;
+    --muted: #596579;
+    --card: #ffffff;
+    --line: #d8e0ec;
+    --navy: #172a46;
+    --blue: #2463eb;
+    --green: #15803d;
+    --gold: #b7791f;
+    --red: #b91c1c;
+    --soft-blue: #eaf1ff;
+    --soft-green: #e9f8ef;
+    --soft-gold: #fff7df;
+    --shadow: 0 12px 30px rgba(23, 42, 70, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: radial-gradient(circle at top left, #ffffff 0, var(--bg) 42%, #e9eef7 100%);
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 26px 18px 34px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #172a46 0%, #1e3a5f 55%, #22577a 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 280px;
+    height: 280px;
+    background: rgba(255,255,255,0.09);
+    border-radius: 50%;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    max-width: 850px;
+    margin: 0;
+    font-size: 16px;
+    color: rgba(255,255,255,0.88);
+  }
+
+  .focus-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .focus-box {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 14px;
+    backdrop-filter: blur(4px);
+  }
+
+  .focus-box strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .focus-box span {
+    color: rgba(255,255,255,0.86);
+    font-size: 13px;
+  }
+
+  .notice {
+    margin: 16px 0 0;
+    background: rgba(255,255,255,0.12);
+    border-left: 5px solid #facc15;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.92);
+  }
+
+  .panel {
+    margin-top: 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .panel h2 {
+    margin: 0 0 10px;
+    font-size: 22px;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 16px;
+  }
+
+  ul { margin: 8px 0 0; padding-left: 20px; }
+  li { margin: 5px 0; }
+
+  .credential-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .pill {
+    border-radius: 999px;
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--soft-blue);
+    color: #174ea6;
+    border: 1px solid #c7d8ff;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin-top: 18px;
+    background: rgba(243,246,251,0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 8px 24px rgba(23,42,70,0.08);
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  input, select {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: white;
+    color: var(--ink);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .stat {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 11px;
+    text-align: center;
+  }
+
+  .stat .num {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+
+  .stat .label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .section-title {
+    margin: 26px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  .category-badge {
+    font-size: 12px;
+    font-weight: 800;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 17px;
+    box-shadow: 0 10px 22px rgba(23,42,70,0.08);
+    display: flex;
+    flex-direction: column;
+    min-height: 330px;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .score {
+    min-width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    color: white;
+  }
+
+  .score.a-plus { background: var(--green); }
+  .score.a { background: var(--blue); }
+  .score.b { background: var(--gold); }
+  .score.c { background: #64748b; }
+
+  .card h3 {
+    margin: 0 0 3px;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .fit {
+    margin: 10px 0;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 10px;
+    font-size: 13.5px;
+  }
+
+  .keywords {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .keyword {
+    font-size: 11.5px;
+    border-radius: 999px;
+    padding: 4px 7px;
+    background: #eef2ff;
+    color: #3730a3;
+    border: 1px solid #d9ddff;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .btn {
+    text-decoration: none;
+    text-align: center;
+    padding: 9px 7px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 800;
+    border: 1px solid transparent;
+    color: white;
+  }
+
+  .btn.indeed { background: #2557a7; }
+  .btn.monster { background: #5f259f; }
+  .btn.special { background: #0f766e; }
+
+  .footer {
+    margin-top: 26px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 980px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .why-grid, .focus-strip { grid-template-columns: 1fr; }
+    .filters { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 12px; }
+    .hero { padding: 20px; border-radius: 18px; }
+    .cards, .stats, .filters { grid-template-columns: 1fr; }
+    .toolbar { position: static; }
+    .buttons { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: white; }
+    .page { max-width: none; padding: 0.25in; }
+    .toolbar, .buttons { display: none; }
+    .hero, .panel, .card { box-shadow: none; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .card { min-height: auto; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<header class="hero">
+<h1>Earl Shaw-Davis - Live Job Alignment Board</h1>
+<p class="subtitle">Job board organized by best resume fit. Updated May 15, 2026. Includes 30 total live-search cards: 10 Security, 10 Warehouse/Forklift/Production, and 10 Grounds/Traffic/Parking options.</p>
+<div class="focus-strip">
+<div class="focus-box"><strong>Primary focus</strong><span>Security Officer / Safety / Access Control</span></div>
+<div class="focus-box"><strong>Backup fit</strong><span>Warehouse / Forklift / Freight / Production</span></div>
+<div class="focus-box"><strong>Third path</strong><span>Grounds / Vegetation / Traffic Control / Parking</span></div>
+</div>
+<div class="notice"><strong>Accuracy note:</strong> This board now contains 30 job-search cards, 10 per category. Each card uses three live-search paths: Indeed, Monster, and a job-type-specific specialty site. Job boards change quickly, so use filters by city, background requirements, license requirements, pay, and schedule after opening each link.</div>
+</header>
+<section class="panel">
+<div class="why-grid">
+<div>
+<h2>Why these jobs fit Earl</h2>
+<ul>
+<li><strong>Strongest resume signals:</strong> Security Guard, freight and receiving, forklift certification, packaging, traffic control, valet driving, and current vegetation management crew work.</li>
+<li><strong>Best immediate direction:</strong> Unarmed security, access control, gate attendant, patrol support, parking security, and event security roles.</li>
+<li><strong>Best backup direction:</strong> Warehouse associate, forklift operator, material handler, production worker, grounds crew, traffic control, and valet/parking attendant roles.</li>
+</ul>
+</div>
+<div>
+<h2>Credentials to use</h2>
+<div class="credential-row">
+<span class="pill">Forklift Certified</span>
+<span class="pill">California Driver's License</span>
+<span class="pill">High School Diploma</span>
+<span class="pill">El Cajon, CA</span>
+</div>
+<p style="margin-top:12px;color:var(--muted);font-size:13.5px;">Security is the preferred target, but some security postings may require a clean background review or BSIS guard card. Warehouse, grounds, parking, and traffic roles give Earl practical backup options.</p>
+</div>
+</div>
+</section>
+<section class="toolbar">
+<div class="filters">
+<input id="searchBox" placeholder="Search cards, examples: forklift, security, traffic, El Cajon" type="search"/>
+<select id="categoryFilter">
+<option value="all">All categories</option>
+<option value="Security">Security</option>
+<option value="Warehouse">Warehouse / Forklift</option>
+<option value="Grounds">Grounds / Traffic / Parking</option>
+</select>
+<select id="scoreFilter">
+<option value="all">All alignment scores</option>
+<option value="A+">A+ best match</option>
+<option value="A">A strong match</option>
+<option value="B">B good match</option>
+<option value="C">C backup match</option>
+</select>
+<select id="locationFilter">
+<option value="all">All locations</option>
+<option value="El Cajon">El Cajon</option>
+<option value="San Diego">San Diego</option>
+<option value="East County">East County</option>
+</select>
+</div>
+<div class="stats">
+<div class="stat"><span class="num" id="visibleCount">0</span><span class="label">Visible searches</span></div>
+<div class="stat"><span class="num" id="topCount">0</span><span class="label">A/A+ matches</span></div>
+<div class="stat"><span class="num" id="catCount">0</span><span class="label">Categories</span></div>
+<div class="stat"><span class="num" id="cardCount">0</span><span class="label">Search cards</span></div>
+</div>
+</section>
+<div class="section-title"><h2>Security Officer / Safety / Access Control</h2><span class="category-badge">Primary Path</span></div>
+<section class="cards"><article class="card" data-category="Security" data-keywords="security guard officer access control patrol gate attendant unarmed bsis" data-location="El Cajon San Diego East County" data-score="A+">
+<div class="card-top"><div><h3>Unarmed Security Officer</h3><div class="meta">El Cajon / San Diego - Full-time and part-time searches</div></div><div class="score a-plus">A+</div></div>
+<div class="fit">Best target based on Earl's stated interest and prior security experience. Emphasize alertness, following post orders, safety awareness, customer contact, and access control.</div>
+<div class="keywords"><span class="keyword">Security</span><span class="keyword">Access Control</span><span class="keyword">Patrol</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=unarmed+security+officer&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=unarmed-security-officer&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://jobs.aus.com/search-jobs/El%20Cajon%2C%20CA/22950/4/6252001-5332921-5391832-5345529/32x79477/-116x96253/25/2" target="_blank">Allied</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="access control gate guard front gate security officer guard card lobby patrol" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Access Control / Gate Security</h3><div class="meta">East County / San Diego - Security desk and gate roles</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match if the role focuses on checking people in, watching entrances, keeping order, and reporting concerns. Good fit for clear, rule-based work.</div>
+<div class="keywords"><span class="keyword">Gate</span><span class="keyword">Check-In</span><span class="keyword">Safety</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=access+control+security+guard&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=access-control-security-guard&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.securitasjobs.com/en-US/search?keywords=Security%20Officer&amp;location=San%20Diego%2C%20CA" target="_blank">Securitas</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="parking security event security traffic guard valet patrol lot attendant" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Parking Security / Lot Patrol</h3><div class="meta">San Diego County - Parking lots, events, hospitals, campuses</div></div><div class="score a">A</div></div>
+<div class="fit">Good bridge between security, valet, traffic control, and customer service. Emphasize safe vehicle movement, watching lots, reporting issues, and helping guests.</div>
+<div class="keywords"><span class="keyword">Parking</span><span class="keyword">Patrol</span><span class="keyword">Vehicles</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=parking+security+lot+patrol&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=parking-security-lot-patrol&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://careers.abm.com/global/en/search-results?keywords=parking%20security&amp;location=San%20Diego%2C%20CA" target="_blank">ABM</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="event security crowd control traffic control fairgrounds guard event staff" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Event Security / Crowd Support</h3><div class="meta">San Diego County - Stadiums, fairs, events, venues</div></div><div class="score b">B</div></div>
+<div class="fit">Good backup security path because Earl has traffic control and public-facing work. Emphasize staying calm, following instructions, directing people, and keeping areas safe.</div>
+<div class="keywords"><span class="keyword">Events</span><span class="keyword">Crowd</span><span class="keyword">Traffic</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=event+security+crowd+control&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=event-security-crowd-control&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://jobs.bestcrowdmanagement.com/search-jobs/San%20Diego%2C%20CA/44464/4/6252001-5332921-5391832-5391811/32x71574/-117x16108/25/2" target="_blank">Best Crowd</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="overnight security guard patrol report access control graveyard shift" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Security Guard - Overnight Shift</h3><div class="meta">El Cajon / San Diego - Overnight guard and patrol roles</div></div><div class="score a">A</div></div>
+<div class="fit">Good option when the job needs dependability, attention, patrols, and reporting during quieter hours. Emphasize staying alert and following site rules.</div>
+<div class="keywords"><span class="keyword">Overnight</span><span class="keyword">Patrol</span><span class="keyword">Reports</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=overnight+security+guard&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=overnight-security-guard&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://jobs.garda.com/search/?q=security&amp;locationsearch=San+Diego%2C+CA" target="_blank">GardaWorld</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="retail security loss prevention store safety customer service guard" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Retail Security / Loss Prevention Support</h3><div class="meta">Retail stores, shopping centers, and entry-level security posts</div></div><div class="score b">B</div></div>
+<div class="fit">Good fit if the role is unarmed and focused on watching entrances, greeting customers, reporting issues, and supporting store safety.</div>
+<div class="keywords"><span class="keyword">Retail</span><span class="keyword">Loss Prevention</span><span class="keyword">Customer</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=retail+security+guard+loss+prevention&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=retail-security-guard-loss-prevention&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://jobs.target.com/search-jobs/security/San%20Diego%2C%20CA/1118/1/6252001-5332921-5391832-5391811/32x71574/-117x16108/25/2" target="_blank">Target Jobs</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="mobile patrol security driver vehicle patrol license guard card" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Mobile Patrol Driver</h3><div class="meta">San Diego County - Patrol driving roles requiring a valid license</div></div><div class="score b">B</div></div>
+<div class="fit">Possible fit because Earl has a California driver license and security experience. Screen carefully for background, driving record, and guard card requirements.</div>
+<div class="keywords"><span class="keyword">Driver License</span><span class="keyword">Patrol</span><span class="keyword">Mobile</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=mobile+patrol+security+driver&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=mobile-patrol-security-driver&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://inter-con.com/careers/" target="_blank">Inter-Con</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="lobby security front desk guard visitor check in access control" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Lobby Security / Front Desk Guard</h3><div class="meta">Offices, shelters, housing sites, hotels, and public buildings</div></div><div class="score a">A</div></div>
+<div class="fit">Strong security option if duties include greeting people, watching the front entrance, checking visitors, and calling for help when needed.</div>
+<div class="keywords"><span class="keyword">Lobby</span><span class="keyword">Front Desk</span><span class="keyword">Visitors</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=lobby+security+front+desk+guard&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=lobby-security-front-desk-guard&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.securitasjobs.com/en-US/search?keywords=Lobby%20Security&amp;location=San%20Diego%2C%20CA" target="_blank">Securitas</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="construction site security guard outdoor patrol safety hazard report" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Construction Site Security</h3><div class="meta">East County / San Diego - Construction yards and active sites</div></div><div class="score b">B</div></div>
+<div class="fit">Good option because it combines security, outdoor awareness, traffic safety, and site watching. Emphasize safety, patrols, and reporting hazards.</div>
+<div class="keywords"><span class="keyword">Construction</span><span class="keyword">Site Safety</span><span class="keyword">Outdoor</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=construction+site+security+guard&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=construction-site-security-guard&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.ziprecruiter.com/jobs-search?search=construction+site+security&amp;location=San+Diego%2C+CA" target="_blank">ZipRecruiter</a></div>
+</article>
+<article class="card" data-category="Security" data-keywords="gatehouse attendant security booth gate control vehicles visitor log" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Gatehouse Attendant / Security Booth</h3><div class="meta">Communities, lots, warehouses, and controlled entry sites</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match for basic access control work. Emphasize checking vehicles, watching the gate, following instructions, and staying professional.</div>
+<div class="keywords"><span class="keyword">Gatehouse</span><span class="keyword">Vehicles</span><span class="keyword">Check-In</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=gatehouse+attendant+security&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=gatehouse-attendant-security&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.indeed.com/jobs?q=gatehouse+attendant+security&amp;l=San+Diego%2C+CA" target="_blank">Indeed Gatehouse</a></div>
+</article>
+</section>
+<div class="section-title"><h2>Warehouse / Forklift / Freight / Production</h2><span class="category-badge">Backup Path</span></div>
+<section class="cards"><article class="card" data-category="Warehouse" data-keywords="forklift operator warehouse certified freight loading unloading pallet jack material handler" data-location="El Cajon San Diego East County" data-score="A+">
+<div class="card-top"><div><h3>Forklift Operator</h3><div class="meta">El Cajon / San Diego - Certified forklift searches</div></div><div class="score a-plus">A+</div></div>
+<div class="fit">Strong backup target because Earl is forklift certified and has warehouse, freight, and packaging experience. Emphasize safe equipment use, loading, staging, and material movement.</div>
+<div class="keywords"><span class="keyword">Forklift</span><span class="keyword">Certified</span><span class="keyword">Warehouse</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=forklift+operator&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=forklift-operator&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.ziprecruiter.com/jobs-search?search=forklift+operator&amp;location=El+Cajon%2C+CA" target="_blank">ZipRecruiter</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="warehouse associate material handler loading unloading freight receiving stock inventory" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Warehouse Associate / Material Handler</h3><div class="meta">El Cajon / San Diego - Entry and experienced roles</div></div><div class="score a">A</div></div>
+<div class="fit">Very practical option. Use Home Depot freight and receiving, CP Kelco packaging, forklift certification, and physical crew work to support this path.</div>
+<div class="keywords"><span class="keyword">Material Handler</span><span class="keyword">Loading</span><span class="keyword">Receiving</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=warehouse+associate+material+handler&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=warehouse-associate-material-handler&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.aerotek.com/en/search-jobs?k=warehouse%20associate&amp;l=San%20Diego%2C%20CA" target="_blank">Aerotek</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="freight receiving home depot stock associate overnight freight team unloading trucks" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Freight / Receiving Associate</h3><div class="meta">Retail warehouse and store receiving roles</div></div><div class="score a">A</div></div>
+<div class="fit">Direct match to Earl's Home Depot experience. Emphasize unloading trucks, moving product, stocking, staging, and working safely with the team.</div>
+<div class="keywords"><span class="keyword">Freight</span><span class="keyword">Receiving</span><span class="keyword">Stocking</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=freight+receiving+associate&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=freight-receiving-associate&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://careers.homedepot.com/job-search-results/?keyword=freight&amp;location=El%20Cajon%2C%20CA" target="_blank">Home Depot</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="packaging operator production worker mill manufacturing machine operator cp kelco palletize label stack" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Production / Packaging Worker</h3><div class="meta">Manufacturing, food production, and packaging plants</div></div><div class="score b">B</div></div>
+<div class="fit">Good fit if the job is hands-on and training is provided. Emphasize packaging, labeling, stacking, palletizing, cleanup, and following production instructions.</div>
+<div class="keywords"><span class="keyword">Packaging</span><span class="keyword">Production</span><span class="keyword">Palletizing</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=production+packaging+worker&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=production-packaging-worker&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.randstadusa.com/jobs/q-packaging/s-production-occupations/california/san-diego/" target="_blank">Randstad</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="loader unloader warehouse truck freight physical labor staging" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Loader / Unloader</h3><div class="meta">Warehouses, stores, moving companies, and distribution centers</div></div><div class="score a">A</div></div>
+<div class="fit">Good match for freight and physical labor experience. Emphasize lifting, sorting, staging, truck unloading, and safe teamwork.</div>
+<div class="keywords"><span class="keyword">Loading</span><span class="keyword">Unloading</span><span class="keyword">Physical Work</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=loader+unloader+warehouse&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=loader-unloader-warehouse&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.peopleready.com/jobs/?keywords=warehouse&amp;location=San%20Diego%2C%20CA" target="_blank">PeopleReady</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="order picker warehouse fulfillment pick list inventory material handler" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Order Picker / Warehouse Picker</h3><div class="meta">Distribution centers and warehouse fulfillment roles</div></div><div class="score b">B</div></div>
+<div class="fit">Good option if training is provided. Emphasize following pick lists, moving products, accuracy, and safe warehouse work.</div>
+<div class="keywords"><span class="keyword">Order Picking</span><span class="keyword">Accuracy</span><span class="keyword">Warehouse</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=order+picker+warehouse&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=order-picker-warehouse&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.employbridge.com/jobs/?keywords=order%20picker&amp;location=San%20Diego%2C%20CA" target="_blank">EmployBridge</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="shipping receiving warehouse clerk helper staging freight inventory" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Shipping and Receiving Clerk Helper</h3><div class="meta">Warehouse support roles with basic paperwork and staging</div></div><div class="score b">B</div></div>
+<div class="fit">Possible fit if the job is hands-on and not heavy on paperwork. Emphasize receiving, staging, checking product, and following directions.</div>
+<div class="keywords"><span class="keyword">Shipping</span><span class="keyword">Receiving</span><span class="keyword">Staging</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=shipping+receiving+warehouse+helper&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=shipping-receiving-warehouse-helper&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.mykelly.com/search-results/?keyword=shipping%20receiving&amp;location=San%20Diego%2C%20CA" target="_blank">Kelly</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="palletizer packaging line worker wrap pallets label stack production" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Palletizer / Packaging Line Worker</h3><div class="meta">Food, manufacturing, and production warehouse roles</div></div><div class="score b">B</div></div>
+<div class="fit">Good fit for CP Kelco-type duties. Emphasize stacking, labeling, wrapping pallets, keeping the area clean, and production teamwork.</div>
+<div class="keywords"><span class="keyword">Palletizing</span><span class="keyword">Packaging</span><span class="keyword">Line Work</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=palletizer+packaging+line+worker&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=palletizer-packaging-line-worker&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.randstadusa.com/jobs/q-palletizer/california/san-diego/" target="_blank">Randstad</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="overnight freight stocker retail warehouse unloading stocking shelves" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Stocker / Overnight Freight Associate</h3><div class="meta">Retail freight teams and overnight stocking roles</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match to Home Depot freight work. Emphasize unloading, stocking shelves, moving product, keeping aisles safe, and working as part of a team.</div>
+<div class="keywords"><span class="keyword">Stocking</span><span class="keyword">Overnight</span><span class="keyword">Freight</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=overnight+freight+stocker&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=overnight-freight-stocker&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://talent.lowes.com/us/en/search-results?keywords=freight&amp;location=San%20Diego%2C%20CA" target="_blank">Lowe's</a></div>
+</article>
+<article class="card" data-category="Warehouse" data-keywords="yard worker warehouse forklift lumber supply outdoor loading material handler" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Yard Worker / Warehouse Yard Associate</h3><div class="meta">Lumber yards, supply yards, and outdoor warehouse jobs</div></div><div class="score b">B</div></div>
+<div class="fit">Good bridge between warehouse and outdoor work. Emphasize forklift certification, loading, cleanup, customer help, and safe material handling.</div>
+<div class="keywords"><span class="keyword">Yard</span><span class="keyword">Forklift</span><span class="keyword">Outdoor</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=yard+associate+warehouse+forklift&amp;l=El+Cajon%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=yard-associate-warehouse-forklift&amp;where=El-Cajon__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.84lumber.com/careers/" target="_blank">84 Lumber</a></div>
+</article>
+</section>
+<div class="section-title"><h2>Grounds / Vegetation / Traffic Control / Parking Operations</h2><span class="category-badge">Third Path</span></div>
+<section class="cards"><article class="card" data-category="Grounds" data-keywords="groundskeeper vegetation management landscaping crew brush clearing weed abatement cleanup" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Groundskeeper / Vegetation Crew</h3><div class="meta">El Cajon / East County - Outdoor labor and grounds roles</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match to his current ECTLC vegetation work. Emphasize outdoor labor, brush clearing, weed abatement, debris removal, teamwork, and safety.</div>
+<div class="keywords"><span class="keyword">Grounds</span><span class="keyword">Vegetation</span><span class="keyword">Cleanup</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=groundskeeper+vegetation+management&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=groundskeeper-vegetation-management&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.governmentjobs.com/jobs?keyword=groundskeeper&amp;location=San%20Diego%2C%20CA" target="_blank">Gov Jobs</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="traffic control flagger parking attendant event traffic cones signs pedestrian safety fairgrounds" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Traffic Control / Flagger</h3><div class="meta">San Diego County - Events, road work, parking lots</div></div><div class="score a">A</div></div>
+<div class="fit">Good match to Del Mar Fairgrounds traffic control. Emphasize directing vehicles, helping pedestrians, using cones/signs, and following safety instructions.</div>
+<div class="keywords"><span class="keyword">Traffic</span><span class="keyword">Flagger</span><span class="keyword">Events</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=traffic+control+flagger&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=traffic-control-flagger&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.ziprecruiter.com/jobs-search?search=traffic+control+flagger&amp;location=San+Diego%2C+CA" target="_blank">ZipRecruiter</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="valet driver parking attendant ace parking driver license vehicle handling customer service" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Valet Driver / Parking Attendant</h3><div class="meta">San Diego County - Hotels, hospitals, lots, events</div></div><div class="score b">B</div></div>
+<div class="fit">Good practical option because Earl has valet experience and a California driver license. Emphasize safe driving, customer service, vehicle handling, and reliability.</div>
+<div class="keywords"><span class="keyword">Valet</span><span class="keyword">Parking</span><span class="keyword">Driver License</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=valet+driver+parking+attendant&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=valet-driver-parking-attendant&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.aceparking.com/careers/" target="_blank">Ace Careers</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="parks maintenance park aide laborer cleanup outdoor worker public service regional park" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Parks Maintenance / Outdoor Labor</h3><div class="meta">El Cajon / San Diego County - Parks, city, county, contractors</div></div><div class="score b">B</div></div>
+<div class="fit">Good fit if the employer values outdoor work, cleanup, safety, and community service. Earl can mention outdoor cleanup work when appropriate.</div>
+<div class="keywords"><span class="keyword">Parks</span><span class="keyword">Maintenance</span><span class="keyword">Outdoor Labor</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=parks+maintenance+laborer&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=parks-maintenance-laborer&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.governmentjobs.com/jobs?keyword=parks%20maintenance&amp;location=San%20Diego%2C%20CA" target="_blank">Gov Jobs</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="landscaping laborer grounds crew trimming cleanup outdoor vegetation" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Landscaping Laborer</h3><div class="meta">El Cajon / East County - Landscaping crews and contractors</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match to vegetation work. Emphasize trimming, cleanup, hauling, teamwork, outdoor work, and following crew lead instructions.</div>
+<div class="keywords"><span class="keyword">Landscaping</span><span class="keyword">Trimming</span><span class="keyword">Crew</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=landscaping+laborer&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=landscaping-laborer&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.brightview.com/careers/search?keywords=landscape&amp;location=San%20Diego%2C%20CA" target="_blank">BrightView</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="weed abatement brush clearance vegetation fire safety outdoor crew cleanup" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Weed Abatement / Brush Clearance Worker</h3><div class="meta">East County - Fire safety, property cleanup, and seasonal crews</div></div><div class="score a">A</div></div>
+<div class="fit">Very good match to vegetation management. Emphasize brush clearing, weed removal, hauling debris, tool safety, and working outdoors.</div>
+<div class="keywords"><span class="keyword">Weed Abatement</span><span class="keyword">Brush</span><span class="keyword">Fire Safety</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=weed+abatement+brush+clearance+worker&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=weed-abatement-brush-clearance-worker&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.indeed.com/jobs?q=weed+abatement+brush+clearance&amp;l=San+Diego%2C+CA" target="_blank">Indeed Brush</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="maintenance helper grounds laborer property cleanup apartment campus" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Maintenance Helper / Grounds Laborer</h3><div class="meta">Apartments, shelters, campuses, and commercial properties</div></div><div class="score b">B</div></div>
+<div class="fit">Good backup if the job is basic maintenance and grounds support. Emphasize cleanup, simple repairs, outdoor work, and helping the team.</div>
+<div class="keywords"><span class="keyword">Maintenance</span><span class="keyword">Grounds</span><span class="keyword">Helper</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=maintenance+helper+grounds+laborer&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=maintenance-helper-grounds-laborer&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.indeed.com/jobs?q=apartment+maintenance+helper&amp;l=San+Diego%2C+CA" target="_blank">Apartment Jobs</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="event parking attendant traffic control guest service fairgrounds parking lot" data-location="El Cajon San Diego East County" data-score="A">
+<div class="card-top"><div><h3>Event Parking Attendant</h3><div class="meta">Venues, fairs, stadiums, churches, and large events</div></div><div class="score a">A</div></div>
+<div class="fit">Strong match to traffic control and valet experience. Emphasize directing cars, helping guests, keeping traffic moving, and staying calm.</div>
+<div class="keywords"><span class="keyword">Event Parking</span><span class="keyword">Guests</span><span class="keyword">Traffic</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=event+parking+attendant&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=event-parking-attendant&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.lazparking.com/careers/" target="_blank">LAZ Parking</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="construction laborer site cleanup outdoor physical labor safety" data-location="El Cajon San Diego East County" data-score="B">
+<div class="card-top"><div><h3>Construction Laborer / Site Cleanup</h3><div class="meta">San Diego County - General labor and site support</div></div><div class="score b">B</div></div>
+<div class="fit">Possible fit for physical outdoor work. Emphasize cleanup, hauling, safety, following instructions, and being dependable on the crew.</div>
+<div class="keywords"><span class="keyword">Construction</span><span class="keyword">Cleanup</span><span class="keyword">Labor</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=construction+laborer+site+cleanup&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=construction-laborer-site-cleanup&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.peopleready.com/jobs/?keywords=construction%20laborer&amp;location=San%20Diego%2C%20CA" target="_blank">PeopleReady</a></div>
+</article>
+<article class="card" data-category="Grounds" data-keywords="city county service worker trainee public works parks streets maintenance" data-location="El Cajon San Diego East County" data-score="C">
+<div class="card-top"><div><h3>City / County Service Worker Trainee</h3><div class="meta">Public works, parks, streets, and entry-level municipal support</div></div><div class="score c">C</div></div>
+<div class="fit">Longer-term option if he qualifies. Emphasize outdoor labor, traffic control, cleanup, safe work habits, and willingness to learn.</div>
+<div class="keywords"><span class="keyword">Public Works</span><span class="keyword">Trainee</span><span class="keyword">Parks</span></div>
+<div class="buttons"><a class="btn indeed" href="https://www.indeed.com/jobs?q=service+worker+trainee+public+works&amp;l=San+Diego%2C+CA" target="_blank">Indeed</a><a class="btn monster" href="https://www.monster.com/jobs/search?q=service-worker-trainee-public-works&amp;where=San-Diego__2C-CA" target="_blank">Monster</a><a class="btn special" href="https://www.governmentjobs.com/jobs?keyword=service%20worker%20trainee&amp;location=San%20Diego%2C%20CA" target="_blank">GovernmentJobs</a></div>
+</article>
+</section>
+<div class="footer">Prepared for Earl Shaw-Davis. This board is designed for phone, tablet, or desktop use. Each card opens live searches through Indeed, Monster, and a job-type-specific specialty site.</div>
+</div>
+<script>
+const cards = Array.from(document.querySelectorAll('.card'));
+const searchBox = document.getElementById('searchBox');
+const categoryFilter = document.getElementById('categoryFilter');
+const scoreFilter = document.getElementById('scoreFilter');
+const locationFilter = document.getElementById('locationFilter');
+const visibleCount = document.getElementById('visibleCount');
+const topCount = document.getElementById('topCount');
+const catCount = document.getElementById('catCount');
+const cardCount = document.getElementById('cardCount');
+
+function normalize(value) { return (value || '').toLowerCase().trim(); }
+
+function applyFilters() {
+  const query = normalize(searchBox.value);
+  const category = categoryFilter.value;
+  const score = scoreFilter.value;
+  const location = locationFilter.value;
+  let visible = 0;
+  let top = 0;
+  const visibleCats = new Set();
+
+  cards.forEach(card => {
+    const text = normalize(card.innerText + ' ' + card.dataset.keywords + ' ' + card.dataset.location);
+    const cardCategory = card.dataset.category;
+    const cardScore = card.dataset.score;
+    const cardLocation = card.dataset.location;
+
+    const matchQuery = !query || text.includes(query);
+    const matchCategory = category === 'all' || cardCategory === category;
+    const matchScore = score === 'all' || cardScore === score;
+    const matchLocation = location === 'all' || cardLocation.includes(location);
+
+    const show = matchQuery && matchCategory && matchScore && matchLocation;
+    card.classList.toggle('hidden', !show);
+
+    if (show) {
+      visible++;
+      visibleCats.add(cardCategory);
+      if (cardScore === 'A+' || cardScore === 'A') top++;
+    }
+  });
+
+  visibleCount.textContent = visible;
+  topCount.textContent = top;
+  catCount.textContent = visibleCats.size;
+  cardCount.textContent = cards.length;
+}
+
+[searchBox, categoryFilter, scoreFilter, locationFilter].forEach(el => el.addEventListener('input', applyFilters));
+applyFilters();
+</script>
+</body>
+</html>
