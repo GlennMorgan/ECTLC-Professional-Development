@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanctuary Job Board - Heavy Equipment</title>
+    <style>
+        /* Sanctuary Standard Generation Protocol - CSS Styles */
+        @page { size: portrait; margin: 0.5in; }
+        body { 
+            font-family: 'Arial Narrow', Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            line-height: 1.1; 
+            color: #000; 
+            background-color: #fff;
+        }
+        .header { 
+            text-align: center; 
+            font-size: 32pt; 
+            font-weight: 900;
+            text-transform: uppercase; 
+            margin-bottom: 15px; 
+            border-bottom: 5px solid #000; 
+            padding-bottom: 5px;
+        }
+        .featured-section { margin-bottom: 20px; }
+        .section-title { 
+            font-size: 18pt; 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            text-decoration: underline; 
+            text-transform: uppercase;
+        }
+        .featured-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            background: #f2f2f2; 
+            padding: 10px; 
+            border: 2px solid #000; 
+        }
+        .featured-job { font-size: 11pt; font-weight: bold; }
+        .main-body { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 30px; 
+            border-top: 2px solid #000; 
+            padding-top: 15px; 
+        }
+        .column-header { 
+            text-align: center; 
+            font-size: 14pt; 
+            font-weight: 900; 
+            margin-bottom: 12px; 
+            text-transform: uppercase; 
+            border-bottom: 2px solid #000; 
+        }
+        .listing { 
+            margin-bottom: 10px; 
+            font-size: 10pt; 
+            page-break-inside: avoid; 
+        }
+        .company { font-weight: 900; text-transform: uppercase; display: block; }
+        .job-title { font-weight: 700; display: block; }
+        .pay { display: block; }
+        .location { font-style: italic; display: block; }
+        .footer { 
+            margin-top: 20px; 
+            text-align: left; 
+            font-size: 10pt; 
+            font-weight: bold; 
+            border-top: 1px solid #ccc;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">HEAVY EQUIPMENT OPERATOR JOBS</div>
+
+    <div class="featured-section">
+        <div class="section-title">Top 6 Featured Jobs</div>
+        <div class="featured-grid">
+            <div class="featured-job">AM ORTEGA<br>Vac Truck Operator<br>$29.00 – $35.00/hr<br>Lakeside</div>
+            <div class="featured-job">ALTA-RAM CONSTRUCTION<br>Equipment Operator<br>From $20.00/hr<br>Alpine</div>
+            <div class="featured-job">RUST AND SONS TRUCKING<br>Heavy Equipment Operator<br>$25.00 – $30.00/hr<br>El Cajon</div>
+            <div class="featured-job">RAM JACK PACIFIC<br>Equipment Crew Hand<br>$20.00 – $30.00/hr<br>El Cajon</div>
+            <div class="featured-job">CITY OF SAN DIEGO<br>Landfill Equipment Operator<br>$36.39 – $43.51/hr<br>San Diego</div>
+            <div class="featured-job">COUNTY OF SAN DIEGO<br>Equipment Operator-Road<br>$31.40 – $38.53/hr<br>San Diego</div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="column">
+            <div class="column-header">Indeed Jobs</div>
+            <div class="listing"><span class="company">AM ORTEGA</span><span class="job-title">Asphalt Paving Operator</span><span class="location">Lakeside</span></div>
+            <div class="listing"><span class="company">ZERO IMPACT BUILDERS</span><span class="job-title">Construction Equipment Operator</span><span class="pay">$19.00 – $22.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">DYNO NOBEL</span><span class="job-title">Driller / Drill Operator</span><span class="pay">$25.00 – $30.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">R.E. STAITE ENGINEERING</span><span class="job-title">Friction Crane Operator</span><span class="pay">$45.00 – $50.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">ESSEL</span><span class="job-title">Heavy Equipment Operator</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">GENERAL DYNAMICS NASSCO</span><span class="job-title">Crane Operator</span><span class="pay">$33.15 – $36.50/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">VCI CONSTRUCTION</span><span class="job-title">Telecom Equipment Operator</span><span class="pay">$20.25 – $27.50/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">RUCKLE CONSTRUCTION</span><span class="job-title">Lead Operator</span><span class="pay">$38.00 – $44.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">BRIGHTVIEW LANDSCAPES</span><span class="job-title">Operating Engineer</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">CURTIS DRILLING</span><span class="job-title">Foundation Drill Operator</span><span class="location">Escondido</span></div>
+            <div class="listing"><span class="company">BECK & POLLITZER</span><span class="job-title">Crane Operator</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">TEAM FISHEL</span><span class="job-title">Excavating Operator</span><span class="pay">$26.00 – $30.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">HAZARD CONSTRUCTION</span><span class="job-title">Construction Superintendent</span><span class="location">Lakeside</span></div>
+            <div class="listing"><span class="company">CONEYBEARE</span><span class="job-title">Assembly - 1st Shift</span><span class="pay">$20.00 – $21.00/hr</span><span class="location">El Cajon</span></div>
+            <div class="listing"><span class="company">SOUTHWEST BOULDER</span><span class="job-title">Forklift Operator</span><span class="pay">$17.75 – $19.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">R+L CARRIERS</span><span class="job-title">Forklift Operator PT</span><span class="pay">From $23.75/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">GLOBAL POWER GROUP</span><span class="job-title">Generator Technician</span><span class="pay">$35.00 – $60.00/hr</span><span class="location">Lakeside</span></div>
+            <div class="listing"><span class="company">1-800-PACK-RAT</span><span class="job-title">Forklift Operator</span><span class="pay">$19.00 – $20.00/hr</span><span class="location">Lakeside</span></div>
+            <div class="listing"><span class="company">LORMAC PLASTICS</span><span class="job-title">CNC Operator</span><span class="pay">$17.00 – $23.00/hr</span><span class="location">Escondido</span></div>
+            <div class="listing"><span class="company">BROADWAY EQUIPMENT</span><span class="job-title">Field Service Tech</span><span class="pay">$30.00 – $35.00/hr</span><span class="location">Escondido</span></div>
+        </div>
+
+        <div class="column">
+            <div class="column-header">Monster Jobs</div>
+            <div class="listing"><span class="company">ESSEL</span><span class="job-title">Heavy Equipment Operator</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">COUNTY OF SAN DIEGO</span><span class="job-title">Landfill Equipment Operator</span><span class="pay">$31.40 – $38.53/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">CITY OF SAN DIEGO</span><span class="job-title">Landfill Equipment Operator</span><span class="pay">$36.39 – $43.51/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">REPUBLIC SERVICES</span><span class="job-title">Heavy Equipment Tech</span><span class="pay">$25.90 – $35.65/hr</span><span class="location">Santee</span></div>
+            <div class="listing"><span class="company">LA MESA-SPRING VALLEY SCHOOLS</span><span class="job-title">Heavy Equipment Tech</span><span class="pay">$30.12 – $38.39/hr</span><span class="location">La Mesa</span></div>
+            <div class="listing"><span class="company">DEL MAR FAIRGROUNDS</span><span class="job-title">Equipment Operator</span><span class="pay">$20.00 – $27.25/hr</span><span class="location">Del Mar</span></div>
+            <div class="listing"><span class="company">DYCOM INDUSTRIES</span><span class="job-title">Equipment Operator</span><span class="pay">$20.25 – $27.50/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">HAAKER EQUIPMENT</span><span class="job-title">Heavy Equipment Mechanic</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">ESSEL</span><span class="job-title">Heavy Forklift Operator</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">VCI CONSTRUCTION</span><span class="job-title">Heavy Machinery Operator</span><span class="pay">$20.25 – $27.50/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">REPUBLIC SERVICES</span><span class="job-title">Landfill Tech A</span><span class="pay">$25.90 – $35.65/hr</span><span class="location">Chula Vista</span></div>
+            <div class="listing"><span class="company">TEAM FISHEL</span><span class="job-title">Directional Drill Operator</span><span class="pay">$26.00 – $30.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">GAT AIRLINE GROUND SUPPORT</span><span class="job-title">Ground Equipment Mechanic</span><span class="pay">$35.50/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">NW SERVICE ENTERPRISES</span><span class="job-title">Assembly Technician</span><span class="pay">$17.00 – $30.00/hr</span><span class="location">Santee</span></div>
+            <div class="listing"><span class="company">ECTRON CORPORATION</span><span class="job-title">Computer Assembly Tech</span><span class="pay">$20.00 – $25.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">BUDGET TRUCK</span><span class="job-title">Mobile Automotive Tech</span><span class="pay">$35.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">NASSCO</span><span class="job-title">Crane Operator (Double Trolley)</span><span class="pay">$30.24 – $30.74/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">CITY OF SAN DIEGO</span><span class="job-title">Utility Systems Operator</span><span class="pay">$30.22 – $35.19/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">R.E. STAITE ENGINEERING</span><span class="job-title">Barge Equipment Operator</span><span class="pay">$45.00 – $50.00/hr</span><span class="location">San Diego</span></div>
+            <div class="listing"><span class="company">ALTA-RAM CONSTRUCTION</span><span class="job-title">Skidsteer/Excavator Operator</span><span class="pay">From $20.00/hr</span><span class="location">Alpine</span></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Updated: April 10, 2026
+    </div>
+
+</body>
+</html>
